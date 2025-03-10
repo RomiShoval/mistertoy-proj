@@ -6,8 +6,6 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
         price: filterBy.price || "",
         inStock: filterBy.inStock || "All"})
 
-
-
     function onSubmitFilter(){
         onSetFilterBy(filterByToEdit)
     }
@@ -20,7 +18,6 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
             if(value === "All") value = null
             value = value ==="inStock"
         }
-
         switch (target.type) {
             case 'range':
                 value = +value || ''
@@ -32,7 +29,6 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
 
             default: break
         }
-
         setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
     }
 

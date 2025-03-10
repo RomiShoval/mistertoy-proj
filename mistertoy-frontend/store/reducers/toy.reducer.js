@@ -9,8 +9,6 @@ export const SET_FILTER_BY = 'SET_FILTER_BY'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 export const UPDATE_TOY_FIELD = 'UPDATE_TOY_FIELD'
 
-
-
 const initialState = {
     toys: [],
     lastToys: [],
