@@ -1,5 +1,5 @@
-import { utilService } from './util.service.js'
-import { storageService } from './async-storage.service.js'
+import { utilService } from './utilService.js'
+import { storageService } from './storageService.js'
 
 const TOY_KEY = 'toyDB'
 _createToys()
@@ -11,8 +11,7 @@ export const toyService = {
     save,
     getEmptyToy,
     getDefaultFilter,
-    // getFilterFromSearchParams,
-    getImportanceStats,
+    getFilterFromSearchParams,
 }
 // For Debug (easy access from console):
 window.cs = toyService
@@ -27,7 +26,10 @@ function query(filterBy = {}) {
             }
 
             if (filterBy.price) {
-                toys = toys.filter(toy => toy.price >= filterBy.price)
+                const priceValue = Number(filterBy.price)
+                console.log(typeof(priceValue))
+                toys = toys.filter(toy => toy.price >= priceValue)
+                console.log(`filtered toys by price:` , toys)
             }
             if(filterBy.inStock !== null && filterBy.inStock !== undefined){
                 toys = toys.filter(toy => toy.inStock === filterBy.inStock)
@@ -50,7 +52,6 @@ function remove(toyId) {
 
 function save(toy) {
     if (toy._id) {
-        // TODO - updatable fields
         toy.updatedAt = Date.now()
         return storageService.put(TOY_KEY, toy)
     } else {
@@ -60,40 +61,28 @@ function save(toy) {
 }
 
 function getEmptyToy(name = '', price = 5) {
-    const id = storageService._makeId()
-    return { id,name, price}
+    return { name, price}
 }
 
 function getDefaultFilter() {
     return { name: '', price: 0 ,inStock :null}
 }
 
-// function getFilterFromSearchParams(searchParams) {
-//     const defaultFilter = getDefaultFilter()
-//     const filterBy = {}
-//     for (const field in defaultFilter) {
-//         if (field === "isDone") {
-//             filterBy[field] = searchParams.get(field);
-//             if (filterBy[field] === "All" || !filterBy[field]) filterBy[field] = null;
-//             else filterBy[field] = filterBy[field] === "Done";
-//         }
-//         else{
-//             filterBy[field] = searchParams.get(field) || ''
-//         }
-//     }
-//     return filterBy
-// }
-
-
-// function getImportanceStats() {
-//     return storageService.query(TODO_KEY)
-//         .then(todos => {
-//             const todoCountByImportanceMap = _getTodoCountByImportanceMap(todos)
-//             const data = Object.keys(todoCountByImportanceMap).map(speedName => ({ title: speedName, value: todoCountByImportanceMap[speedName] }))
-//             return data
-//         })
-
-// }
+function getFilterFromSearchParams(searchParams) {
+    const defaultFilter = getDefaultFilter()
+    const filterBy = {}
+    for (const field in defaultFilter) {
+        if (field === "inStock") {
+            filterBy[field] = searchParams.get(field);
+            if (filterBy[field] === "All" || !filterBy[field]) filterBy[field] = null;
+            else filterBy[field] = filterBy[field] === "inStock";
+        }
+        else{
+            filterBy[field] = searchParams.get(field) || ''
+        }
+    }
+    return filterBy
+}
 
 function _createToys() {
     let toys = utilService.loadFromStorage(TOY_KEY)
@@ -108,7 +97,7 @@ function _createToys() {
     }
 }
 
-function _createToy(name, price) {
+function _createToy(name, price =5) {
     const toy = getEmptyToy(name, price)
     toy._id = utilService.makeId()
     toy.createdAt = toy.updatedAt = Date.now() - utilService.getRandomIntInclusive(0, 1000 * 60 * 60 * 24)
@@ -122,19 +111,10 @@ function _setNextPrevToyId(toy) {
         const prevToyId = toys[toyIdx - 1] ? toys[toyIdx - 1] : toys[toys.length - 1]
         toy.nextToyId = nextToyId._id
         toy.prevToyId = prevToyId._id
-        return totoydo
+        return toy
     })
 }
 
-// function _getTodoCountByImportanceMap(todos) {
-//     const todoCountByImportanceMap = todos.reduce((map, todo) => {
-//         if (todo.importance < 3) map.low++
-//         else if (todo.importance < 7) map.normal++
-//         else map.urgent++
-//         return map
-//     }, { low: 0, normal: 0, urgent: 0 })
-//     return todoCountByImportanceMap
-// }
 
 
 // Data Model:

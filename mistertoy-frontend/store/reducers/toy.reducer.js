@@ -26,14 +26,14 @@ export function toyReducer(state = initialState , cmd={}){
             case REMOVE_TOY:
             return {
                 ...state,
-                toys : state.toys.filter(toy => toy._id!=cmd.toyId),
+                toys : state.toys.filter(toy => toy._id != cmd.toyId),
                 lastToys:[...state.toys]
                 
             }
             case ADD_TOY:
             return {
                 ...state,
-                toys : [...state.toys,cmd.toy],
+                toys : [...state.toys , cmd.toy],
             }
             case UPDATE_TOY:
             return {
@@ -43,7 +43,7 @@ export function toyReducer(state = initialState , cmd={}){
             case  SET_FILTER_BY:
             return {
                 ...state,
-                filterBy : {...state.filterBy,...cmd.filterBy}
+                filterBy : {...state.filterBy , ...cmd.filterBy}
             }
             case  SET_IS_LOADING:
             return {
@@ -59,7 +59,7 @@ export function toyReducer(state = initialState , cmd={}){
             return {
                 ...state,
                 toys : state.toys.map(toy => 
-                    toy._id === cmd.toyId ? {...toy,[cmd.field] : cmd.value} : toy
+                    toy._id === cmd.toyId ? {...toy , [cmd.field] : cmd.value} : toy
                 )
             }
             default:

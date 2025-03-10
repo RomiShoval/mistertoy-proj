@@ -5,11 +5,7 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
         name: filterBy.name || "",
         price: filterBy.price || "",
         inStock: filterBy.inStock || "All"})
-
-    function onSubmitFilter(){
-        onSetFilterBy(filterByToEdit)
-    }
-
+        
     function handleChange({ target }) {
         const field = target.name
         let value = target.value
@@ -29,15 +25,19 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
 
             default: break
         }
-        setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
+
+        //updating filterBy state and filterByToEdit
+        const updatedFilter = { ...filterByToEdit, [field]: value }
+        setFilterByToEdit(updatedFilter)
+        onSetFilterBy(updatedFilter)
     }
 
     const { name, price } = filterByToEdit
 
     return (
-        <section className="todo-filter">
+        <section className="toy-filter">
             <h2>Filter Todos</h2>
-            <form onSubmit={onSubmitFilter}>
+            <form>
                 <input 
                     value={name} 
                     onChange={handleChange}
@@ -65,7 +65,6 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
                     <option value="inStock">inStock</option>
                     <option value="out of stock">out of stock</option>
                 </select>
-                <button hidden onClick={onSubmitFilter} >Set Filter</button>
             </form>
         </section>
     )

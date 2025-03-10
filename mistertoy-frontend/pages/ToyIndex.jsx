@@ -3,16 +3,16 @@ import { ToyList } from '../cmps/ToyList.jsx'
 // import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { toyService } from '../services/toyService.js'
 // import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-// import { removeTodo,saveTodo ,loadTodos} from "../store/actions/todo.actions.js"
+import { removeToy , saveToy , loadToys} from '../store/actions/toysActions.js'
 import {SET_FILTER_BY} from '../store/reducers/toy.reducer.js'
 
 import { useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router'
-import {useSelector,useDispatch} from 'redux'
+import {useSelector,useDispatch} from 'react-redux'
 
 export function ToyIndex() {
-
     const toys = useSelector(storeState => storeState.toyModule.toys)
+    console.log("toys state:",toys)
     const isLoading = useSelector(storeState => storeState.toyModule.isLoading)
     const filterBy = useSelector(storeState => storeState.toyModule.filterBy)
     const dispatch = useDispatch()
@@ -44,7 +44,7 @@ export function ToyIndex() {
         const toyToSave = { ...toy, inStock: !toy.inStock }
         saveToy(toyToSave)
             .then((savedToy) => {
-                showSuccessMsg(`Todo is ${(savedToy.inStock)? 'inStock' : 'out of stock'}`)
+                showSuccessMsg(`Toy is ${(savedToy.inStock)? 'inStock' : 'out of stock'}`)
             })
             .catch(() => {
                 showErrorMsg('Cannot toggle toy ' + toyToSave._id)
@@ -71,10 +71,6 @@ export function ToyIndex() {
                 : <div>Loading..</div>
             }
             <hr />
-            {/* <h2>Toys Table</h2>
-            <div style={{ width: '60%', margin: 'auto' }}>
-                <DataTable toys={toys} onRemoveTodo={onRemoveToy} />
-            </div> */}
         </section>
     )
 }

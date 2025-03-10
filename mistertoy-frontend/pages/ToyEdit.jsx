@@ -1,11 +1,11 @@
 import { toyService } from '../services/toyService.js'
-// import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-// import { saveTodo } from "../store/actions/todo.actions.js"
+import { showErrorMsg, showSuccessMsg } from '../services/eventBusService.js'
+import { saveToy } from '../store/actions/toysActions.js'
 import { SET_TOY, UPDATE_TOY_FIELD } from '../store/reducers/toy.reducer.js'
 
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router'
-import {useSelector,useDispatch} from 'redux'
+import {useSelector,useDispatch} from 'react-redux'
 
 export function ToyEdit() {
     const dispatch = useDispatch()
