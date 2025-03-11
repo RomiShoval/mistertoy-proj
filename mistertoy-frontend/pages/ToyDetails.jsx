@@ -8,7 +8,7 @@ export function ToyDetails() {
     const {toyId} = useParams()
     const navigate = useNavigate()
     useEffect(() => {
-        console.log(toyId)
+        // console.log(toyId)
         if (toyId) loadToy()
     }, [toyId])
 

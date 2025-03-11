@@ -11,13 +11,11 @@ import { Link, useSearchParams } from 'react-router'
 import {useSelector,useDispatch} from 'react-redux'
 
 export function ToyIndex() {
-
     const toys = useSelector(storeState => storeState.toyModule.toys)
     const isLoading = useSelector(storeState => storeState.toyModule.isLoading)
     const filterBy = useSelector(storeState => storeState.toyModule.filterBy)
 
     const dispatch = useDispatch()
-
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -71,22 +69,25 @@ export function ToyIndex() {
     
 
     return (
-        <section className="toy-index">
+        <div className="toy-index">
+            <h3>Toys List</h3>
+            <main>
             <section>
                     <button className='add-btn'><Link to={`/toy/edit`}>Add Toy</Link></button>
                     <button onClick={onAddToy}>Add Random Toy ⛐</button>
             </section>
             <ToyFilter filterBy={filterBy} onSetFilterBy={onSetFilter} />
-            <h2>Toys List</h2>
             {!isLoading ?
                 <ToyList 
                     toys={toys} 
                     onRemoveToy={onRemoveToy} 
                     onToggleToy={onToggleToy} 
-                    isLoading = {isLoading}/>
+                    isLoading = {isLoading}
+                />
                 : <div>Loading..</div>
             }
             <hr />
-        </section>
+            </main>
+        </div>  
     )
 }

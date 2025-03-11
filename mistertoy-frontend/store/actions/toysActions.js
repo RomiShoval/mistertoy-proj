@@ -32,9 +32,9 @@ export  function loadToys(){
     store.dispatch({type:SET_IS_LOADING , isLoading : true})
     console.log('toy action -> filterBy :',filterBy)
     return toyService.query(filterBy)
-        .then((filteredToys) =>{
-            console.log('toy action -> filteredToys:', filteredToys)
-            store.dispatch({ type: SET_TOYS, toys: filteredToys })
+        .then(toys =>{
+            console.log('toy action -> filteredToys:', toys)
+            store.dispatch({ type: SET_TOYS, toys })
         })
         .catch(err =>{
             console.log('toy action -> cannot save toy:', err)

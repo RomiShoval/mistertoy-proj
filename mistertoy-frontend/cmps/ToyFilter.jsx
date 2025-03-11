@@ -1,54 +1,55 @@
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 
 export function ToyFilter({ filterBy, onSetFilterBy }) {
     const [filterByToEdit, setFilterByToEdit] = useState({ 
         name: filterBy.name || "",
         price: filterBy.price || "",
         inStock: filterBy.inStock || "All"})
-        
-    function handleChange({ target }) {
-        const field = target.name
-        let value = target.value
 
+    useEffect(() => {
+        onSetFilterBy(filterByToEdit)
+    }, [filterByToEdit])
+
+    function handleChange({ target }) {
+        let {value , name: field, type} = target
         if(field === "inStock"){
             if(value === "All") value = null
-            value = value ==="inStock"
+            value = value ==="inStock" ? "inStock" : "out of stock"
         }
-        switch (target.type) {
+        switch (type) {
+            case 'number':
+                value = +value
+                break
+            case 'txt':
+                value = +value
+            break
             case 'range':
                 value = +value || ''
                 break
-
             case 'checkbox':
                 value = target.checked
                 break
-
             default: break
         }
-
-        //updating filterBy state and filterByToEdit
-        const updatedFilter = { ...filterByToEdit, [field]: value }
-        setFilterByToEdit(updatedFilter)
-        onSetFilterBy(updatedFilter)
+        setFilterByToEdit(prevFilter => ({...prevFilter , [field]:value}))
     }
-
-    const { name, price } = filterByToEdit
 
     return (
         <section className="toy-filter">
-            <h2>Filter Todos</h2>
+            <h2>Toys Filter</h2>
             <form>
+                <label htmlFor="price">Name: </label>
                 <input 
-                    value={name} 
+                    value={filterByToEdit.name} 
                     onChange={handleChange}
-                    type="search" 
+                    type="txt" 
                     placeholder="By name" 
                     id="name" 
                     name="name"
                 />
                 <label htmlFor="price">Price: </label>
                 <input 
-                    value={price} 
+                    value={filterByToEdit.price} 
                     onChange={handleChange}
                     type="number" 
                     placeholder="By price" 
@@ -59,11 +60,11 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
                 <select
                     id="inStock"
                     name="inStock"
-                    value={filterByToEdit.inStock === null ? "All" : filterByToEdit.inStock ? "inStock" :"out of stock"}
+                    value={filterByToEdit.inStock}
                     onChange={handleChange}>
                     <option value="All">All</option>
                     <option value="inStock">inStock</option>
-                    <option value="out of stock">out of stock</option>
+                    <option value="out of stock">Out of stock</option>
                 </select>
             </form>
         </section>

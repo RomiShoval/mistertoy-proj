@@ -21,13 +21,6 @@ window.cs = toyService
 function query(filterBy = {}) {
     return storageService.query(TOY_KEY)
         .then(toys => {
-            if (!Array.isArray(toys)) {
-                console.error('Error: storageService.query() did not return an array!', toys);
-                return [];
-            }
-            return toys;
-        })
-        .then(toys => {
             if (filterBy.name) {
                 const regExp = new RegExp(filterBy.name, 'i')
                 toys = toys.filter(toy => regExp.test(toy.name))
@@ -35,11 +28,10 @@ function query(filterBy = {}) {
 
             if (filterBy.price) {
                 const priceValue = Number(filterBy.price)
-                console.log(typeof(priceValue))
                 toys = toys.filter(toy => toy.price >= priceValue)
                 console.log(`filtered toys by price:` , toys)
             }
-            if(filterBy.inStock !== null && filterBy.inStock !== undefined){
+            if(filterBy.inStock !== null && filterBy.inStock !== undefined && filterBy.inStock !== 'All'){
                 toys = toys.filter(toy => toy.inStock === filterBy.inStock)
             }
             return toys

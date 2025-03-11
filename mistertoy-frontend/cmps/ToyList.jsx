@@ -14,7 +14,7 @@ export function ToyList({ toys, onRemoveToy, onToggleToy ,isLoading }) {
     return (
         <ul className="toys-list">
             {toys.map(toy =>
-                <li key={toy._id} className={getToyPrice(toy.price)}>
+                <li className={getToyPrice(toy.price)} key={toy._id} >
                     <ToyPreview toy={toy} onToggleToy={()=>onToggleToy(toy)} />
                     <section>
                         <button onClick={() => onRemoveToy(toy._id)}>Remove</button>
