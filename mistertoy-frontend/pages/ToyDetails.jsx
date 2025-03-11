@@ -8,7 +8,6 @@ export function ToyDetails() {
     const {toyId} = useParams()
     const navigate = useNavigate()
     useEffect(() => {
-        // console.log(toyId)
         if (toyId) loadToy()
     }, [toyId])
 
@@ -32,9 +31,10 @@ export function ToyDetails() {
     return (
         <section className="toy-details">
             <h1 className={(toy.inStock)? 'inStock' : 'not in stock'}>{toy.name}</h1>
-            {/* <h2>{(toy.inStock)? 'inStock!' : 'In your list'}</h2> */}
+            <h2>{(toy.inStock)? 'inStock!' : 'In your list'}</h2>
 
             <h1>Toy price: {toy.price}</h1>
+            <h1>Created At: {new Date(toy.createdAt).toISOString().split('T')[0]}</h1>
             <button onClick={onBack}>Back to list</button>
             <div>
                 <Link to={`/toy/${toy.nextToyId}`}>Next Toy</Link> |

@@ -16,6 +16,9 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
             if(value === "All") value = null
             value = value ==="inStock" ? "inStock" : "out of stock"
         }
+        if (field === "created") {
+            value = value ? new Date(value).getTime() : ""
+        }
         switch (type) {
             case 'number':
                 value = +value
@@ -56,7 +59,15 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
                     id="price" 
                     name="price"
                 />
-                 <label htmlFor="inStock">Status: </label>
+                <label htmlFor="created">Created After: </label>
+                <input
+                    type="date"  
+                    id="created"
+                    name="created"
+                    value={filterByToEdit.created ? new Date(filterByToEdit.created).toLocaleDateString('en-CA') : ""}
+                    onChange={handleChange}
+                />
+                <label htmlFor="inStock">Status: </label>
                 <select
                     id="inStock"
                     name="inStock"

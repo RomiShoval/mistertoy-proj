@@ -25,7 +25,6 @@ function query(filterBy = {}) {
                 const regExp = new RegExp(filterBy.name, 'i')
                 toys = toys.filter(toy => regExp.test(toy.name))
             }
-
             if (filterBy.price) {
                 const priceValue = Number(filterBy.price)
                 toys = toys.filter(toy => toy.price >= priceValue)
@@ -33,6 +32,14 @@ function query(filterBy = {}) {
             }
             if(filterBy.inStock !== null && filterBy.inStock !== undefined && filterBy.inStock !== 'All'){
                 toys = toys.filter(toy => toy.inStock === filterBy.inStock)
+            }
+            if (filterBy.created) {
+                const createdFilterDate = new Date(filterBy.created);
+                const filterDateStr = createdFilterDate.toISOString().split('T')[0]
+                toys = toys.filter(toy => {
+                    const toyDateStr = new Date(toy.createdAt).toISOString().split('T')[0]
+                    return toyDateStr === filterDateStr
+                })
             }
             return toys
         })
@@ -124,6 +131,7 @@ function _setNextPrevToyId(toy) {
     // imgUrl: 'hardcoded-url-for-now', 
     // price: 123, 
     // labels: ['Doll', 'Battery Powered', 'Baby'], 
-    // createdAt: 1631031801011, inStock: true,
+    // createdAt: 1631031801011, 
+    // inStock: true,
     // }
 
