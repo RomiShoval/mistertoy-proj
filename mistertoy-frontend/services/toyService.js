@@ -17,7 +17,6 @@ export const toyService = {
 // For Debug (easy access from console):
 window.cs = toyService
 
-//to change filterBy values
 function query(filterBy = {}) {
     return storageService.query(TOY_KEY)
         .then(toys => {

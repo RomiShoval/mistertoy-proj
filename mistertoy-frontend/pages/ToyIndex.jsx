@@ -19,11 +19,6 @@ export function ToyIndex() {
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
 
-    // useEffect(() =>{
-    //     const defaultFilter = toyService.getFilterFromSearchParams(searchParams)
-    //     dispatch({type:SET_FILTER_BY, filterBy:defaultFilter})
-    // },[])
-
     useEffect(() => {
         setSearchParams(filterBy)
         loadToys()

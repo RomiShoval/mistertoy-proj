@@ -2,13 +2,9 @@ import { useState ,useEffect} from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router'
 import {useSelector,useDispatch} from 'react-redux'
+import {UserMsg} from './UserMsg.jsx'
 
 export function AppHeader() {
-    // const navigate = useNavigate()
-    // const dispatch = useDispatch()
-    
-    // const toys = useSelector(state => state.toyModule.todos)
-  
     return (
         <header className="app-header full main-layout">
             <section className="header-container">
@@ -19,7 +15,7 @@ export function AppHeader() {
                     <NavLink to="/toy">Toys</NavLink>
                 </nav>
             </section>
-            {/* <UserMsg /> */}
+            <UserMsg />
         </header>
     )
 }

@@ -1,4 +1,5 @@
 import { useState ,useEffect} from 'react'
+import PropTypes from 'prop-types'
 
 export function ToyFilter({ filterBy, onSetFilterBy }) {
     const [filterByToEdit, setFilterByToEdit] = useState({ 
@@ -80,4 +81,14 @@ export function ToyFilter({ filterBy, onSetFilterBy }) {
             </form>
         </section>
     )
+}
+
+ToyFilter.propTypes = {
+    filterBy: PropTypes.shape({
+        name: PropTypes.string,
+        price: PropTypes.number,
+        inStock: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+        created: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    }).isRequired,
+    onSetFilterBy: PropTypes.func.isRequired
 }
