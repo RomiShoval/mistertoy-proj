@@ -3,42 +3,44 @@ import { SET_TOYS,REMOVE_TOY,ADD_TOY,UPDATE_TOY,SET_IS_LOADING } from '../reduce
 import { store } from '../store.js';
 
 
-export async function removeToy(toyId){
-    try {
-        await toyService.remove(toyId);
-        store.dispatch({ type: REMOVE_TOY, toyId });
-    } catch (err) {
-        console.error('Error removing toy:', err);
-        throw err;
-    }
+export function removeToy(toyId){
+    return toyService.remove(toyId)
+        .then(() =>{
+            store.dispatch({ type: REMOVE_TOY, toyId })
+        })
+        .catch(err => {
+            console.error('toy action -> cannot remove toy:', err);
+            throw err
+        })        
 } 
 
-export async function saveToy(toy){
+export function saveToy(toy){
     const type = toy._id ? UPDATE_TOY :ADD_TOY
-    try {
-        const savedToy = await toyService.save(toy);
-        store.dispatch({ type: type, toy: savedToy });
-        return savedToy;
-    } catch (err) {
-        console.log('err:', err);
-        throw err;
-    }
+    return toyService.save(toy)
+        .then((savedToy) =>{
+            store.dispatch({ type: type, toy: savedToy })
+            return saveToy
+        })
+        .catch(err =>{
+            console.log('toy action -> cannot save toy:', err)
+            throw err
+        })
 } 
 
-export async function loadToys(){
-    store.dispatch({type:SET_IS_LOADING , isLoading : true})
+export  function loadToys(){
     const filterBy = store.getState().toyModule.filterBy
-    console.log(filterBy)
-    try {
-        const filteredToys = await toyService.query(filterBy);
-        console.log(filteredToys)
-        store.dispatch({ type: SET_TOYS, toys: filteredToys });
-        return filteredToys;
-    } catch (err) {
-        console.eror('err:', err);
-        throw err;
-    }
-    finally {
-        store.dispatch({ type: SET_IS_LOADING, isLoading: false });
-    }
+    store.dispatch({type:SET_IS_LOADING , isLoading : true})
+    console.log('toy action -> filterBy :',filterBy)
+    return toyService.query(filterBy)
+        .then((filteredToys) =>{
+            console.log('toy action -> filteredToys:', filteredToys)
+            store.dispatch({ type: SET_TOYS, toys: filteredToys })
+        })
+        .catch(err =>{
+            console.log('toy action -> cannot save toy:', err)
+            throw err
+        })
+        .finally (() => {
+            store.dispatch({ type: SET_IS_LOADING, isLoading: false })
+        })
 }

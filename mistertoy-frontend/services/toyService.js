@@ -12,6 +12,7 @@ export const toyService = {
     getEmptyToy,
     getDefaultFilter,
     getFilterFromSearchParams,
+    _createToy
 }
 // For Debug (easy access from console):
 window.cs = toyService
@@ -19,6 +20,13 @@ window.cs = toyService
 //to change filterBy values
 function query(filterBy = {}) {
     return storageService.query(TOY_KEY)
+        .then(toys => {
+            if (!Array.isArray(toys)) {
+                console.error('Error: storageService.query() did not return an array!', toys);
+                return [];
+            }
+            return toys;
+        })
         .then(toys => {
             if (filterBy.name) {
                 const regExp = new RegExp(filterBy.name, 'i')
@@ -41,7 +49,7 @@ function query(filterBy = {}) {
 function get(toyId) {
     return storageService.get(TOY_KEY, toyId)
         .then(toyId => {
-            toy = _setNextPrevToyId(toyId)
+            const toy = _setNextPrevToyId(toyId)
             return toy
         })
 }

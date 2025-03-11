@@ -11,25 +11,30 @@ import { Link, useSearchParams } from 'react-router'
 import {useSelector,useDispatch} from 'react-redux'
 
 export function ToyIndex() {
+
     const toys = useSelector(storeState => storeState.toyModule.toys)
-    console.log("toys state:",toys)
     const isLoading = useSelector(storeState => storeState.toyModule.isLoading)
     const filterBy = useSelector(storeState => storeState.toyModule.filterBy)
+
     const dispatch = useDispatch()
 
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
 
-    useEffect(() =>{
-        const defaultFilter = toyService.getFilterFromSearchParams(searchParams)
-        dispatch({type:SET_FILTER_BY, filterBy:defaultFilter})
-    },[])
+    // useEffect(() =>{
+    //     const defaultFilter = toyService.getFilterFromSearchParams(searchParams)
+    //     dispatch({type:SET_FILTER_BY, filterBy:defaultFilter})
+    // },[])
 
     useEffect(() => {
         setSearchParams(filterBy)
         loadToys()
-        .catch(() =>showErrorMsg('Cannot load toys'))
+            .catch(() =>showErrorMsg('Cannot load toys'))
     }, [filterBy])
+
+    function onSetFilter(filterBy) {
+        dispatch({ type: SET_FILTER_BY, filterBy })
+    }
 
     function onRemoveToy(toyId) {
         const isConfirmed = confirm("Are you sure you want to delete?")
@@ -38,6 +43,18 @@ export function ToyIndex() {
        removeToy(toyId)
             .then(() => {showSuccessMsg(`Toy removed`)})
             .catch(() => {showErrorMsg('Cannot remove toy ' + toyId)})
+    }
+
+    function onAddToy() {
+        const toyToSave = toyService._createToy()
+        
+        saveToy(toyToSave)
+            .then((savedToy) => {
+                showSuccessMsg(`Car added (id: ${savedToy._id})`)
+            })
+            .catch(err => {
+                showErrorMsg(`Cannot add car`)
+            })
     }
 
     function onToggleToy(toy) {
@@ -51,16 +68,15 @@ export function ToyIndex() {
             })
     }
 
-    function onSetFilter(newFilter) {
-        dispatch({ type: SET_FILTER_BY, filterBy :newFilter })
-    }
+    
 
     return (
         <section className="toy-index">
+            <section>
+                    <button className='add-btn'><Link to={`/toy/edit`}>Add Toy</Link></button>
+                    <button onClick={onAddToy}>Add Random Toy ⛐</button>
+            </section>
             <ToyFilter filterBy={filterBy} onSetFilterBy={onSetFilter} />
-            <div>
-                <Link to="/toy/edit" className="btn">Add Toy</Link>
-            </div>
             <h2>Toys List</h2>
             {!isLoading ?
                 <ToyList 

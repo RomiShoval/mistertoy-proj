@@ -1,26 +1,25 @@
 import { toyService } from '../services/toyService.js'
-// import { showErrorMsg } from "../services/event-bus.service.js"
-
+import { showErrorMsg } from '../services/eventBusService.js'
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router'
 
 export function ToyDetails() {
     const [toy, setToy] = useState(null)
-    const params = useParams()
+    const {toyId} = useParams()
     const navigate = useNavigate()
-
     useEffect(() => {
-        loadToy()
-    }, [params.toyId])
+        console.log(toyId)
+        if (toyId) loadToy()
+    }, [toyId])
 
 
     function loadToy() {
-        toyService.get(params.toyId)
-            .then(setToy)
+        toyService.get(toyId)
+            .then(toy => setToy(toy))
             .catch(err => {
                 console.error('err:', err)
-                showErrorMsg('Cannot load todo')
-                navigate('/todo')
+                showErrorMsg('Cannot load toy')
+                navigate('/toy')
             })
     }
 
@@ -36,7 +35,6 @@ export function ToyDetails() {
             {/* <h2>{(toy.inStock)? 'inStock!' : 'In your list'}</h2> */}
 
             <h1>Toy price: {toy.price}</h1>
-            {/* <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim rem accusantium, itaque ut voluptates quo? Vitae animi maiores nisi, assumenda molestias odit provident quaerat accusamus, reprehenderit impedit, possimus est ad?</p> */}
             <button onClick={onBack}>Back to list</button>
             <div>
                 <Link to={`/toy/${toy.nextToyId}`}>Next Toy</Link> |
