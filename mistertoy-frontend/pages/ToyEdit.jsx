@@ -53,7 +53,6 @@ export function ToyEdit() {
 
     function onSaveToy(ev) {
         ev.preventDefault()
-        console.log('Saving toy:', toyToEdit)
         saveToy(toyToEdit)
             .then((savedToy) => {
                 console.log("Toy Saved:", savedToy)
